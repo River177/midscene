@@ -1,0 +1,97 @@
+{
+  "name": "android-playground-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Midscene Android Playground — Electron desktop app (no Node.js required)",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "node build.mjs",
+    "start": "electron .",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:linux": "npm run build && electron-builder --linux"
+  },
+  "build": {
+    "appId": "com.midscene.android-playground",
+    "productName": "Midscene Android Playground",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json",
+      "node_modules/sharp/**/*",
+      "node_modules/@img/**/*"
+    ],
+    "asarUnpack": [
+      "node_modules/sharp/**/*",
+      "node_modules/@img/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../../packages/android-playground/static",
+        "to": "static",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "../../packages/android-playground/bin/scrcpy-server",
+        "to": "bin/scrcpy-server"
+      }
+    ],
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "category": "public.app-category.developer-tools"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        }
+      ],
+      "category": "Development"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "dependencies": {
+    "@midscene/android": "workspace:*",
+    "@midscene/playground": "workspace:*",
+    "@midscene/shared": "workspace:*",
+    "@yume-chan/adb": "^1.1.0",
+    "@yume-chan/adb-scrcpy": "^1.1.0",
+    "@yume-chan/adb-server-node-tcp": "^1.1.0",
+    "@yume-chan/scrcpy": "^1.1.0",
+    "@yume-chan/stream-extra": "^1.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "sharp": "^0.34.3",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^18.0.0",
+    "esbuild": "^0.25.0",
+    "electron": "^34.3.0",
+    "electron-builder": "^25.1.8",
+    "typescript": "^5.8.3"
+  }
+}
